@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="whatsapp.com.cursoandroid.whatsapp.activity.LoginActivity"
+    android:background="@color/colorPrimary"
+    android:theme="@style/AppTheme"
+    android:id="@+id/imageLogo"
+    android:foregroundGravity="center_vertical|clip_horizontal">
+
+
+    <ImageView
+        android:layout_width="@dimen/larguraLogo"
+        android:layout_height="@dimen/alturaLogo"
+        app:srcCompat="@drawable/logo"
+        android:id="@+id/imageView"
+        android:layout_marginTop="13dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:layout_marginTop="13dp"
+        android:id="@+id/editLoginEmail"
+        android:layout_below="@+id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:hint="Digite o seu e-mail" />
+
+    <Button
+        android:text="@string/botal_logar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editLoginSenha"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="11dp"
+        android:id="@+id/buttonLogar"
+        android:theme="@style/botaoPadrao"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/editLoginSenha"
+        android:hint="Digite sua senha"
+        android:layout_below="@+id/editLoginEmail"
+        android:layout_alignEnd="@+id/imageView" />
+
+    <TextView
+        android:text="Não tem conta, cadastre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonLogar"
+        android:layout_alignEnd="@+id/editLoginSenha"
+        android:layout_marginTop="32dp"
+        android:id="@+id/textView"
+        android:textColor="@color/textColorPrimary"
+        android:onClick="abrirCadastroUsuario" />
+
+</RelativeLayout>
