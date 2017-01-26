@@ -29,6 +29,7 @@ import whatsapp.com.cursoandroid.whatsapp.R;
 import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 import whatsapp.com.cursoandroid.whatsapp.helper.Preferencias;
 import whatsapp.com.cursoandroid.whatsapp.helper.SlidingTabLayout;
+import whatsapp.com.cursoandroid.whatsapp.model.Contato;
 import whatsapp.com.cursoandroid.whatsapp.model.Usuario;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usuarioReference = databaseReference.child("usuario");
+    private DatabaseReference contatosReference = databaseReference.child("contatos");
 
     private Toolbar toolbar_princiapl;
     private String identificadorContato;
@@ -72,10 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-
-
         return true;
-
     }
 
     @Override
@@ -97,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void abrirCadastroContato() {
         AlertDialog.Builder alertDiBuilder = new AlertDialog.Builder(this);
+
         alertDiBuilder.setTitle("Novo Contato");
         alertDiBuilder.setMessage("E-mail do usuário");
         alertDiBuilder.setCancelable(false);
@@ -107,33 +107,54 @@ public class MainActivity extends AppCompatActivity {
         alertDiBuilder.setPositiveButton("Cadastrar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 String emailContato = editText.getText().toString();
 
                 if (emailContato.isEmpty()){
                     Toast.makeText(MainActivity.this,"Preencha o e-mail", Toast.LENGTH_SHORT).show();
                 } else {
-                    identificadorContato = Base64Custom.converterBase64(emailContato);
+                    identificadorContato = Base64Custom.converterBase64( emailContato );
 
-                    usuarioReference.child(identificadorContato);
-                    Log.i("USERR", "Usuario:::"+usuarioReference.child(identificadorContato).toString());
+                    databaseReference.getDatabase().getReference();
+                    usuarioReference = databaseReference.child("usuario").child(identificadorContato);
 
                     usuarioReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.getValue() != null ){
 
-                                Usuario usuario = new Usuario();
-                                usuario = dataSnapshot.getValue(Usuario.class);
+                            //Verifica se foi retornado algum dado
+                            if( dataSnapshot.getValue() != null ){
+
+                                Usuario usuarioContato = dataSnapshot.getValue(Usuario.class);
+
+                                usuarioContato.getId();
+                                for (DataSnapshot dataSnap : dataSnapshot.getChildren()) {
+
+
+                                }
+
+                                //Log.i("USERCONTATO","EMAIL>>>" +usuarioContato.getEmail()+" Nome>>>"+usuarioContato.getNome());
 
                                 Preferencias preferencias = new Preferencias(MainActivity.this);
                                 String identificadorUsuarioLogado = preferencias.getIdentificador();
 
-                                Log.i("IDENTIFICADOR", "IDENTIFICADOR Logado:: "+identificadorUsuarioLogado);
+                                Contato contato = new Contato();
+                                contato.setIdentificadorUsuario( identificadorContato );
+                                contato.setEmail( usuarioContato.getEmail() );
+                                contato.setNome(usuarioContato.getNome());
+
+                                Log.i("IDENTIFICADOR", " EMAIL:: "+usuarioContato.getEmail() + " Nome >>"+usuarioContato.getNome());
+
+                                //Salvar dados Firebase
+                                contatosReference
+                                        .child( identificadorUsuarioLogado )
+                                        .child( identificadorContato )
+                                        .setValue(contato);
+
                             } else {
                                 Toast.makeText(MainActivity.this, "Usuario não cadastrado" , Toast.LENGTH_SHORT).show();
                             }
                         }
-
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 

@@ -3,21 +3,21 @@ package whatsapp.com.cursoandroid.whatsapp.model;
 /**
  * Created by jonnatas on 25/01/17.
  */
-
 public class Contato {
-    public String indentificadorUsuario;
-    public String nome;
-    public String email;
+
+    private String identificadorUsuario;
+    private String nome;
+    private String email;
 
     public Contato() {
     }
 
-    public String getIndentificadorUsuario() {
-        return indentificadorUsuario;
+    public String getIdentificadorUsuario() {
+        return identificadorUsuario;
     }
 
-    public void setIndentificadorUsuario(String indentificadorUsuario) {
-        this.indentificadorUsuario = indentificadorUsuario;
+    public void setIdentificadorUsuario(String identificadorUsuario) {
+        this.identificadorUsuario = identificadorUsuario;
     }
 
     public String getNome() {

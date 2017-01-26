@@ -34,7 +34,6 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     private Button botaoCadastrar;
     private Usuario usuario;
 
-    private FirebaseAuth firebaseAuth;
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usuarioReferencia = database.child("usuario");
 
@@ -73,6 +72,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     salvarUsuario();
                     finish();
+
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Error ao realizar o cadastro!!!!" + task.getException(),
@@ -85,13 +85,9 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     private void salvarUsuario() {
-        FirebaseUser FU = FirebaseAuth.getInstance().getCurrentUser();
         String identificador = Base64Custom.converterBase64(usuario.getEmail());
-
         usuario.setId(identificador);
-
         usuarioReferencia.child(usuario.getId()).setValue(usuario);
-
     }
 
 }

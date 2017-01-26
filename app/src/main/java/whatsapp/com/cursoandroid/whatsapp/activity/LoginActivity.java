@@ -62,8 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     usuario.setEmail(email.getText().toString());
                     usuario.setSenha(senha.getText().toString());
 
-                    Log.i("TESTE", "Email: " + usuario.getEmail() +", Senha: "+usuario.getSenha());
-                    validarUsuario();
+                    validarLogin();
 
                 } catch (IllegalArgumentException e){
                     Toast.makeText(getApplicationContext(), "Invalido, preencha os campos", Toast.LENGTH_SHORT).show();
@@ -73,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void validarUsuario() {
+    private void validarLogin() {
         firebaseAuth.signInWithEmailAndPassword(usuario.getEmail(), usuario.getSenha())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
