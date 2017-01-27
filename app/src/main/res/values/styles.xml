@@ -11,6 +11,7 @@
         <item name="android:textColor">@android:color/black</item>
 
     </style>
+
     <style name="corAbas">
         <item name="android:textColor">@android:color/white</item>
     </style>

@@ -2,12 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
     tools:context="whatsapp.com.cursoandroid.whatsapp.fragment.ContatosFragment">
 
     <ListView
         android:id="@+id/lv_contatos"
         android:layout_gravity="center|center_horizontal"
+        android:divider="@color/cinza"
+        android:dividerHeight="1dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
