@@ -1,6 +1,5 @@
 package whatsapp.com.cursoandroid.whatsapp.fragment;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -51,15 +50,9 @@ public class ContatosFragment extends Fragment {
         contatos = new ArrayList<>();
         listView = (ListView) view.findViewById(R.id.lv_contatos);
 
-        /*adapter = new ArrayAdapter(
-                getActivity(),
-                R.layout.lista_contatos,
-                contatos
-        );*/
         adapter = new ContatoAdapter(getActivity(),0, contatos);
 
         listView.setAdapter(adapter);
-
 
         Preferencias preferencias = new Preferencias(getActivity());
         String identificarUsuarioLogado = preferencias.getIdentificador();
@@ -74,7 +67,6 @@ public class ContatosFragment extends Fragment {
                     Contato contato = dado.getValue(Contato.class);
                     contatos.add(contato);
                 }
-
                 adapter.notifyDataSetChanged();
             }
 
@@ -88,31 +80,24 @@ public class ContatosFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ConversaActivity.class);
-
                 Contato contato = contatos.get(position);
-
                 intent.putExtra("nome",contato.getNome());
                 intent.putExtra("email",contato.getEmail());
-
                 startActivity(intent);
             }
         });
 
         return view;
-
     }
     @Override
     public void onStart() {
         super.onStart();
         userReference.addValueEventListener(valueEventListenerContato);
-        Log.i("log", "EVENTO::onStart>>");
     }
 
     @Override
     public void onStop() {
         super.onStop();
         userReference.removeEventListener(valueEventListenerContato);
-        Log.i("log", "EVENTO::onStop<<");
     }
-
 }
