@@ -22,6 +22,7 @@
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activity.CadastroUsuarioActivity"
             android:label="@string/title_activity_cadastro_usuario"
@@ -37,7 +38,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ConversaActivity"></activity>
+
+        <activity android:name=".activity.ConversaActivity"
+            android:label="@string/title_activity_conversa"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="whatsapp.com.cursoandroid.whatsapp.activity.MainActivity" />
+        </activity>
+
+
     </application>
 
 </manifest>
