@@ -18,6 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import whatsapp.com.cursoandroid.whatsapp.Adapter.MensagemAdapter;
 import whatsapp.com.cursoandroid.whatsapp.R;
 import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 import whatsapp.com.cursoandroid.whatsapp.helper.Preferencias;
@@ -29,8 +30,9 @@ public class ConversaActivity extends AppCompatActivity {
     private ImageButton btMensagem;
     private EditText editMensagem;
     private ListView listView;
-    private ArrayAdapter<String> arrayAdapter;
-    private ArrayList<String> mensagens;
+
+    private ArrayAdapter<Mensagem> mensagemAdapter;
+    private ArrayList<Mensagem> mensagens;
     private ValueEventListener valueEventListenerMensagens;
 
     private Bundle extra;
@@ -69,13 +71,9 @@ public class ConversaActivity extends AppCompatActivity {
 
         mensagens = new ArrayList<>();
 
-        arrayAdapter = new ArrayAdapter<String>(
-                ConversaActivity.this,
-                android.R.layout.simple_list_item_1,
-                mensagens
-        );
+        mensagemAdapter = new MensagemAdapter(ConversaActivity.this, mensagens);
 
-        listView.setAdapter(arrayAdapter);
+        listView.setAdapter(mensagemAdapter);
 
         mensagemDatabaseReference = mensagemDatabaseReference
                 .child(idUsuarioLogado)
@@ -89,10 +87,10 @@ public class ConversaActivity extends AppCompatActivity {
                 for (DataSnapshot data : dataSnapshot.getChildren()){
                     Mensagem mensagem = data.getValue(Mensagem.class);
 
-                    mensagens.add(mensagem.getMensagem());
+                    mensagens.add(mensagem);
                 }
 
-                arrayAdapter.notifyDataSetChanged();
+                mensagemAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -101,7 +99,7 @@ public class ConversaActivity extends AppCompatActivity {
             }
         };
         mensagemDatabaseReference.addValueEventListener(valueEventListenerMensagens);
-        
+
 
         btMensagem.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -114,8 +112,6 @@ public class ConversaActivity extends AppCompatActivity {
                 Mensagem mensagem = new Mensagem();
                 mensagem.setIdUsuario(idUsuarioLogado);
                 mensagem.setMensagem(textoMensagem);
-
-                Toast.makeText(ConversaActivity.this, idUsuarioLogado+"   "+idUsuarioDestinatario+"   "+textoMensagem, Toast.LENGTH_SHORT).show();
 
                 salvarMensagemFirebase(idUsuarioLogado, idUsuarioDestinatario,mensagem);
             }
