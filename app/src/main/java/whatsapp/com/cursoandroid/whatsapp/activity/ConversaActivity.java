@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import whatsapp.com.cursoandroid.whatsapp.Adapter.MensagemAdapter;
 import whatsapp.com.cursoandroid.whatsapp.R;
+import whatsapp.com.cursoandroid.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 import whatsapp.com.cursoandroid.whatsapp.helper.Preferencias;
 import whatsapp.com.cursoandroid.whatsapp.model.Mensagem;
@@ -40,13 +41,16 @@ public class ConversaActivity extends AppCompatActivity {
     private String idUsuarioDestinatario;
     private String idUsuarioLogado;
 
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mensagemDatabaseReference = databaseReference.child("mensagem");
+    private DatabaseReference databaseReference;
+    private DatabaseReference mensagemDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversa);
+
+        databaseReference = ConfiguracaoFirebase.getFirebase();
+        mensagemDatabaseReference = databaseReference.child("mensagem");
 
         Preferencias preferencias = new Preferencias(ConversaActivity.this);
         idUsuarioLogado = preferencias.getIdentificador();

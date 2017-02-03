@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import whatsapp.com.cursoandroid.whatsapp.Adapter.TabAdapter;
 import whatsapp.com.cursoandroid.whatsapp.R;
+import whatsapp.com.cursoandroid.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 import whatsapp.com.cursoandroid.whatsapp.helper.Preferencias;
 import whatsapp.com.cursoandroid.whatsapp.helper.SlidingTabLayout;
@@ -35,9 +36,10 @@ import whatsapp.com.cursoandroid.whatsapp.model.Usuario;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference usuarioReference = databaseReference.child("usuario");
-    private DatabaseReference contatosReference = databaseReference.child("contatos");
+    private DatabaseReference databaseReference;
+
+    private DatabaseReference usuarioReference;
+    private DatabaseReference contatosReference;
 
     private Toolbar toolbar_princiapl;
     private String identificadorContato;
@@ -50,18 +52,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        databaseReference = ConfiguracaoFirebase.getFirebase();
+        usuarioReference = databaseReference.child("usuario");
+        contatosReference = databaseReference.child("contatos");
+        firebaseAuth = FirebaseAuth.getInstance();
+
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
         viewPager = (ViewPager) findViewById(R.id.vp_pagina);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        toolbar_princiapl = (Toolbar) findViewById(R.id.toolbar_principal);
-        toolbar_princiapl.setTitle("WhatssApp");
-
-        setSupportActionBar(toolbar_princiapl);
 
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setSelectedIndicatorColors(ContextCompat.getColor(this, R.color.colorAccent));
 
+        toolbar_princiapl = (Toolbar) findViewById(R.id.toolbar_principal);
+        toolbar_princiapl.setTitle("WhatssApp");
+
+        setSupportActionBar(toolbar_princiapl);
 
         TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
         viewPager.setAdapter(tabAdapter);
@@ -115,8 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     identificadorContato = Base64Custom.converterBase64( emailContato );
 
-                    databaseReference.getDatabase().getReference();
-                    usuarioReference = databaseReference.child("usuario").child(identificadorContato);
+                    usuarioReference = usuarioReference.child(identificadorContato);
 
                     usuarioReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

@@ -1,7 +1,11 @@
 package whatsapp.com.cursoandroid.whatsapp.model;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import whatsapp.com.cursoandroid.whatsapp.config.ConfiguracaoFirebase;
+import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 
 /**
  * Created by jonnatas on 23/01/17.
@@ -12,6 +16,7 @@ public class Usuario {
     private String nome;
     private String email;
     private String senha;
+    private DatabaseReference databaseReference;
 
     public Usuario(){
 
@@ -49,5 +54,10 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public void salvar() {
+        databaseReference = ConfiguracaoFirebase.getFirebase();
+        databaseReference.child("usuario").child(getId()).setValue(this);
     }
 }

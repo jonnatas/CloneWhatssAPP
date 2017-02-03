@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import whatsapp.com.cursoandroid.whatsapp.R;
+import whatsapp.com.cursoandroid.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 import whatsapp.com.cursoandroid.whatsapp.model.Usuario;
 
@@ -27,6 +28,7 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     private EditText senha;
     private Button botaoCadastrar;
     private Usuario usuario;
+    private FirebaseAuth firebaseAuth;
 
     private DatabaseReference database = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference usuarioReferencia = database.child("usuario");
@@ -55,7 +57,8 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
     }
 
     private void cadastrarUsuario() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        firebaseAuth = ConfiguracaoFirebase.getFirebaseAuth();
         firebaseAuth.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getSenha())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -64,7 +67,11 @@ public class CadastroUsuarioActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             "Usuario cadastrado com sucesso",
                             Toast.LENGTH_LONG).show();
-                    salvarUsuario();
+
+                    String identificador = Base64Custom.converterBase64(usuario.getEmail());
+                    usuario.setId(identificador);
+                    usuario.salvar();
+
                     finish();
 
                 } else {
