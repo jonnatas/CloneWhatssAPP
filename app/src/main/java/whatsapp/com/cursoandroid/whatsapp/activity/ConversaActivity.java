@@ -42,6 +42,9 @@ public class ConversaActivity extends AppCompatActivity {
     private String idUsuarioDestinatario;
     private String idUsuarioLogado;
 
+    private Conversa conversa;
+    private String nomeUsuarioLogado;
+
     private DatabaseReference databaseReference;
     private DatabaseReference mensagemDatabaseReference;
     private DatabaseReference conversaDatabaseReference;
@@ -56,6 +59,7 @@ public class ConversaActivity extends AppCompatActivity {
 
         Preferencias preferencias = new Preferencias(ConversaActivity.this);
         idUsuarioLogado = preferencias.getIdentificador();
+        nomeUsuarioLogado = preferencias.getNome();
 
         btMensagem = (ImageButton) findViewById(R.id.bt_enviar);
         editMensagem = (EditText) findViewById(R.id.edit_mensagem);
@@ -127,6 +131,7 @@ public class ConversaActivity extends AppCompatActivity {
     }
 
     private void salvarMensagem(String idUsuarioLogado, String idUsuarioDestinatario, Mensagem mensagem) {
+
         boolean retornoRemetente = salvarMensagemFirebase(idUsuarioLogado, idUsuarioDestinatario, mensagem);
         boolean retornoDestinatario = salvarMensagemFirebase(idUsuarioDestinatario, idUsuarioLogado, mensagem);
 
@@ -136,6 +141,14 @@ public class ConversaActivity extends AppCompatActivity {
         if (!retornoDestinatario) {
             Toast.makeText(ConversaActivity.this, "Problema ao enviar a mensagem, tente novamente!!!", Toast.LENGTH_SHORT).show();
         }
+
+        conversa = new Conversa();
+        conversa.setIdUsuario(idUsuarioLogado);
+        conversa.setNome(nomeUsuarioLogado);
+        conversa.setMensagem(mensagem.getMensagem());
+
+        salvarConversaFirebase(idUsuarioLogado, idUsuarioDestinatario, conversa);
+
 
     }
 
