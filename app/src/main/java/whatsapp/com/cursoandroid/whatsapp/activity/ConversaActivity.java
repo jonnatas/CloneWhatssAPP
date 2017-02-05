@@ -23,6 +23,7 @@ import whatsapp.com.cursoandroid.whatsapp.R;
 import whatsapp.com.cursoandroid.whatsapp.config.ConfiguracaoFirebase;
 import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 import whatsapp.com.cursoandroid.whatsapp.helper.Preferencias;
+import whatsapp.com.cursoandroid.whatsapp.model.Conversa;
 import whatsapp.com.cursoandroid.whatsapp.model.Mensagem;
 
 public class ConversaActivity extends AppCompatActivity {
@@ -43,6 +44,7 @@ public class ConversaActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
     private DatabaseReference mensagemDatabaseReference;
+    private DatabaseReference conversaDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,11 +119,26 @@ public class ConversaActivity extends AppCompatActivity {
                 mensagem.setIdUsuario(idUsuarioLogado);
                 mensagem.setMensagem(textoMensagem);
 
-                salvarMensagemFirebase(idUsuarioLogado, idUsuarioDestinatario,mensagem);
+                salvarMensagem(idUsuarioLogado, idUsuarioDestinatario, mensagem);
+                editMensagem.setText("");
             }
         }
     });
     }
+
+    private void salvarMensagem(String idUsuarioLogado, String idUsuarioDestinatario, Mensagem mensagem) {
+        boolean retornoRemetente = salvarMensagemFirebase(idUsuarioLogado, idUsuarioDestinatario, mensagem);
+        boolean retornoDestinatario = salvarMensagemFirebase(idUsuarioDestinatario, idUsuarioLogado, mensagem);
+
+        if (!retornoRemetente) {
+            Toast.makeText(ConversaActivity.this, "Problema ao enviar a mensagem, tente novamente!!!", Toast.LENGTH_SHORT).show();
+        }
+        if (!retornoDestinatario) {
+            Toast.makeText(ConversaActivity.this, "Problema ao enviar a mensagem, tente novamente!!!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
     private Boolean salvarMensagemFirebase(String idRemetente, String idDestinatario, Mensagem mensagem) {
         try {
@@ -132,5 +149,35 @@ public class ConversaActivity extends AppCompatActivity {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    private Boolean salvarConversaFirebase(String idRemetente, String idDestinatario, Conversa conversa) {
+        try {
+
+            conversaDatabaseReference = ConfiguracaoFirebase.getFirebase().child("conversas");
+            conversaDatabaseReference.
+                    child(idRemetente).
+                    child(idDestinatario).
+                    setValue(conversa);
+
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mensagemDatabaseReference.addValueEventListener(valueEventListenerMensagens);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mensagemDatabaseReference.removeEventListener(valueEventListenerMensagens);
     }
 }
