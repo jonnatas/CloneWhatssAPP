@@ -142,16 +142,16 @@ public class ConversaActivity extends AppCompatActivity {
             Toast.makeText(ConversaActivity.this, "Problema ao enviar a mensagem, tente novamente!!!", Toast.LENGTH_SHORT).show();
         }
 
-        salvarConversaFirebase(idUsuarioLogado, idUsuarioDestinatario, mensagem);
-        salvarConversaFirebase(idUsuarioDestinatario, idUsuarioLogado, mensagem);
+        salvarConversaFirebase(idUsuarioLogado, nomeUsuarioDestinatario, idUsuarioDestinatario, mensagem);
+        salvarConversaFirebase(idUsuarioDestinatario,nomeUsuarioLogado, idUsuarioLogado, mensagem);
 
     }
 
-    private Boolean salvarConversaFirebase(String idRemetente, String idDestinatario, Mensagem mensagem) {
+    private Boolean salvarConversaFirebase(String idRemetente,String nomeUsuario, String idDestinatario, Mensagem mensagem) {
 
         conversa = new Conversa();
-        conversa.setIdUsuario(idRemetente);
-        conversa.setNome(idDestinatario);
+        conversa.setIdUsuario(idDestinatario);
+        conversa.setNome(nomeUsuario);
         conversa.setMensagem(mensagem.getMensagem());
 
 
