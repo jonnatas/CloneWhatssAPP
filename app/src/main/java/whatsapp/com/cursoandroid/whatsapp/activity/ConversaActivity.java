@@ -142,30 +142,19 @@ public class ConversaActivity extends AppCompatActivity {
             Toast.makeText(ConversaActivity.this, "Problema ao enviar a mensagem, tente novamente!!!", Toast.LENGTH_SHORT).show();
         }
 
+        salvarConversaFirebase(idUsuarioLogado, idUsuarioDestinatario, mensagem);
+        salvarConversaFirebase(idUsuarioDestinatario, idUsuarioLogado, mensagem);
+
+    }
+
+    private Boolean salvarConversaFirebase(String idRemetente, String idDestinatario, Mensagem mensagem) {
+
         conversa = new Conversa();
-        conversa.setIdUsuario(idUsuarioLogado);
-        conversa.setNome(nomeUsuarioLogado);
+        conversa.setIdUsuario(idRemetente);
+        conversa.setNome(idDestinatario);
         conversa.setMensagem(mensagem.getMensagem());
 
-        salvarConversaFirebase(idUsuarioLogado, idUsuarioDestinatario, conversa);
 
-
-    }
-
-
-    private Boolean salvarMensagemFirebase(String idRemetente, String idDestinatario, Mensagem mensagem) {
-        try {
-            databaseReference.child("mensagem").child(idRemetente).child(idDestinatario).push().setValue(mensagem);
-
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-    private Boolean salvarConversaFirebase(String idRemetente, String idDestinatario, Conversa conversa) {
         try {
 
             conversaDatabaseReference = ConfiguracaoFirebase.getFirebase().child("conversas");
@@ -180,6 +169,19 @@ public class ConversaActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    private Boolean salvarMensagemFirebase(String idRemetente, String idDestinatario, Mensagem mensagem) {
+        try {
+            databaseReference.child("mensagem").child(idRemetente).child(idDestinatario).push().setValue(mensagem);
+
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 
     @Override
     protected void onRestart() {
