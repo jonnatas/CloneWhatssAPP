@@ -1,11 +1,13 @@
 package whatsapp.com.cursoandroid.whatsapp.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,7 +20,9 @@ import java.util.ArrayList;
 
 import whatsapp.com.cursoandroid.whatsapp.Adapter.ConversaAdapter;
 import whatsapp.com.cursoandroid.whatsapp.R;
+import whatsapp.com.cursoandroid.whatsapp.activity.ConversaActivity;
 import whatsapp.com.cursoandroid.whatsapp.config.ConfiguracaoFirebase;
+import whatsapp.com.cursoandroid.whatsapp.helper.Base64Custom;
 import whatsapp.com.cursoandroid.whatsapp.helper.Preferencias;
 import whatsapp.com.cursoandroid.whatsapp.model.Conversa;
 
@@ -40,7 +44,7 @@ public class ConversasFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
@@ -75,6 +79,21 @@ public class ConversasFragment extends Fragment {
         };
 
         firebase.addValueEventListener(valueEventListenerConversas);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Conversa conversa = conversas.get(position);
+
+                Intent intent = new Intent(getActivity(), ConversaActivity.class);
+                String email = Base64Custom.decodificarBase64(conversa.getIdUsuario());
+                intent.putExtra("email", email);
+                intent.putExtra("nome", conversa.getNome());
+
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
